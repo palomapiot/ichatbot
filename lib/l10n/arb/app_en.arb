@@ -1,0 +1,7 @@
+{
+    "@@locale": "en",
+    "welcomeMessage": "Welcome to iChat!",
+    "@welcomeMessage": {
+        "description": "Text shown in the center of the Home Page"
+    }
+}

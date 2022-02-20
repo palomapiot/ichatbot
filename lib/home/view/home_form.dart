@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:ichatbot/chat/chat.dart';
 import 'package:ichatbot/common/widgets/base_page.dart';
 import 'package:ichatbot/l10n/l10n.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:ms_undraw/ms_undraw.dart';
 
 class HomeForm extends BasePage {
-  const HomeForm({Key? key}) : super(key: key);
+  const HomeForm({Key? key}) : super(key);
 
   @override
   Widget widget(BuildContext context) {
@@ -63,7 +62,11 @@ class _StartButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         key: const Key('homeForm_start_elevatedButton'),
-        onPressed: () => log('start'),
+        onPressed: () => Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (context) => const ChatPage(),
+          ),
+        ),
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
           primary: const Color.fromRGBO(90, 23, 238, 1),

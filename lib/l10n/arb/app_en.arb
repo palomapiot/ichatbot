@@ -3,5 +3,9 @@
     "welcomeMessage": "Welcome to iChat!",
     "@welcomeMessage": {
         "description": "Text shown in the center of the Home Page"
+    },
+    "writeMessage": "Write message...",
+    "@writeMessage": {
+        "description": "Text shown in the text input of the Chat Page"
     }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BasePage extends StatelessWidget {
-  const BasePage({Key? key}) : super(key: key);
+  const BasePage(Key? key) : super(key: key);
 
   String title(BuildContext context) => 'iChat';
 

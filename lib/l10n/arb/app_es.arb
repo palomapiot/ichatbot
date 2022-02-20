@@ -3,5 +3,9 @@
     "welcomeMessage": "¡Bienvenido a iChat!",
     "@welcomeMessage": {
         "description": "Texto mostrado en el centro de la página principal"
+    },
+    "writeMessage": "Escribe tu mensaje...",
+    "@writeMessage": {
+        "description": "Texto mostrado en la caja de texto de la página del chat"
     }
 }

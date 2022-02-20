@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ichatbot/common/widgets/base_page.dart';
 import 'package:ichatbot/l10n/l10n.dart';
@@ -61,7 +63,7 @@ class _StartButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         key: const Key('homeForm_start_elevatedButton'),
-        onPressed: () => print('start'),
+        onPressed: () => log('start'),
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
           primary: const Color.fromRGBO(90, 23, 238, 1),

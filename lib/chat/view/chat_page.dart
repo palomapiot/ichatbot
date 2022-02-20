@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ichatbot/chat/cubit/chat_cubit.dart';
 import 'package:ichatbot/chat/view/chat_form.dart';
 
 class ChatPage extends StatelessWidget {
@@ -10,9 +8,6 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ChatCubit(),
-      child: const ChatForm(),
-    );
+    return const ChatForm();
   }
 }

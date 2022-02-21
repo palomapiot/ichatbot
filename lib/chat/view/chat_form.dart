@@ -9,7 +9,7 @@ final _controller = ScrollController();
 
 void _scrollDown() {
   _controller.animateTo(
-    _controller.position.maxScrollExtent,
+    _controller.position.maxScrollExtent + 90,
     duration: const Duration(seconds: 1),
     curve: Curves.fastOutSlowIn,
   );
@@ -39,8 +39,11 @@ class ChatForm extends BasePage {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: SafeArea(
-        child: Stack(
-          children: const [_ChatMessages(), _InputText()],
+        child: Column(
+          children: const [
+            Expanded(flex: 9, child: _ChatMessages()),
+            Expanded(child: _InputText())
+          ],
         ),
       ),
     );
@@ -59,7 +62,8 @@ class _ChatMessages extends StatelessWidget {
         return ListView.builder(
           controller: _controller,
           itemCount: messages.length,
-          padding: const EdgeInsets.only(top: 10, bottom: 160),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          physics: const ClampingScrollPhysics(),
           itemBuilder: (context, index) {
             return Container(
               padding: const EdgeInsets.only(

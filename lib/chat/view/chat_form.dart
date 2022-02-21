@@ -5,11 +5,34 @@ import 'package:ichatbot/chat/cubit/models/message.dart';
 import 'package:ichatbot/common/widgets/base_page.dart';
 import 'package:ichatbot/l10n/l10n.dart';
 
+final _controller = ScrollController();
+
+void _scrollDown() {
+  _controller.animateTo(
+    _controller.position.maxScrollExtent,
+    duration: const Duration(seconds: 1),
+    curve: Curves.fastOutSlowIn,
+  );
+}
+
 class ChatForm extends BasePage {
   const ChatForm({Key? key}) : super(key);
 
   @override
   String title(BuildContext context) => 'Chat with your assistant';
+
+  @override
+  List<BlocListener> listeners(BuildContext context) {
+    return [
+      BlocListener<ChatCubit, ChatState>(
+        listenWhen: (previous, current) =>
+            previous.messages != current.messages,
+        listener: (context, state) {
+          _scrollDown();
+        },
+      ),
+    ];
+  }
 
   @override
   Widget widget(BuildContext context) {
@@ -34,15 +57,15 @@ class _ChatMessages extends StatelessWidget {
       builder: (context, state) {
         final messages = state.messages;
         return ListView.builder(
+          controller: _controller,
           itemCount: messages.length,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          padding: const EdgeInsets.only(top: 10, bottom: 160),
           itemBuilder: (context, index) {
             return Container(
               padding: const EdgeInsets.only(
                 left: 16,
                 right: 16,
                 top: 10,
-                bottom: 10,
               ),
               child: messages[index].messageType == MessageType.receiver
                   ? _ReceiverMessage(message: messages[index].messageContent)
@@ -146,7 +169,9 @@ class _InputText extends StatelessWidget {
               width: 15,
             ),
             FloatingActionButton(
-              onPressed: () async => context.read<ChatCubit>().sendMessage(),
+              onPressed: () async {
+                await context.read<ChatCubit>().sendMessage();
+              },
               backgroundColor: Theme.of(context).primaryColor,
               elevation: 0,
               child: const Icon(

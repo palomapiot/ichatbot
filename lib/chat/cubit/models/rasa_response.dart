@@ -1,16 +1,22 @@
-class RasaResponse {
-  RasaResponse(this.text);
-
-  RasaResponse.fromJson(Map<String, String> json) : text = json['text'] ?? '';
-
-  final String text;
-}
-
 class RasaResponseList {
   RasaResponseList(this.responses);
 
-  RasaResponseList.fromJson(List<dynamic> json)
-      : responses = json as List<RasaResponse>;
+  factory RasaResponseList.fromJson(List<dynamic> parsedJson) {
+    final photos = parsedJson
+        .map((dynamic i) => RasaResponse.fromJson(i as Map<String, dynamic>))
+        .toList();
+
+    return RasaResponseList(photos);
+  }
 
   final List<RasaResponse> responses;
+}
+
+class RasaResponse {
+  RasaResponse(this.text);
+
+  RasaResponse.fromJson(Map<String, dynamic> json)
+      : text = json['text'] as String;
+
+  final String text;
 }

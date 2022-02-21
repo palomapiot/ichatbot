@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:ichatbot/chat/cubit/models/message.dart';
+import 'package:ichatbot/chat/cubit/models/rasa_request.dart';
+import 'package:ichatbot/chat/cubit/models/rasa_response.dart';
 
 part 'chat_state.dart';
 
@@ -25,7 +30,23 @@ class ChatCubit extends Cubit<ChatState> {
         ),
       );
     emit(state.copyWith(newMessage: '', messages: updatedMessages));
-    await receiveMessage('Thanks for your message!');
+    final response = await http.post(
+      Uri.parse(
+        'https://86e9-2a02-8388-8cbd-7b80-7064-1610-101b-7262.ngrok.io/webhooks/rest/webhook',
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(RasaRequest('user', state.newMessage).toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body) as List<dynamic>;
+      final rasaResponse = RasaResponseList.fromJson(jsonResponse);
+      await receiveMessage(rasaResponse.responses.first.text);
+    } else {
+      throw Exception('Failed to send message.');
+    }
   }
 
   Future<void> receiveMessage(String text) async {

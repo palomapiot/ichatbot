@@ -63,7 +63,6 @@ class _ChatMessages extends StatelessWidget {
           controller: _controller,
           itemCount: messages.length,
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          physics: const ClampingScrollPhysics(),
           itemBuilder: (context, index) {
             return Container(
               padding: const EdgeInsets.only(

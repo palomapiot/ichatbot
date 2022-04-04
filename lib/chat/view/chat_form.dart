@@ -12,7 +12,7 @@ final _controller = ScrollController();
 
 void _scrollDown() {
   Timer(
-    const Duration(milliseconds: 10),
+    const Duration(milliseconds: 50),
     () => _controller.animateTo(
       _controller.position.maxScrollExtent,
       duration: const Duration(milliseconds: 100),

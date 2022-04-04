@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "welcomeMessage": "Welcome to iChat!",
+    "welcomeMessage": "Welcome to Lume!",
     "@welcomeMessage": {
         "description": "Text shown in the center of the Home Page"
     },

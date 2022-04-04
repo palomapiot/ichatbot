@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ichatbot/chat/chat.dart';
+import 'package:ichatbot/chat/cubit/models/button.dart';
 import 'package:ichatbot/chat/cubit/models/message.dart';
 import 'package:ichatbot/common/widgets/base_page.dart';
 import 'package:ichatbot/l10n/l10n.dart';
@@ -8,10 +11,13 @@ import 'package:ichatbot/l10n/l10n.dart';
 final _controller = ScrollController();
 
 void _scrollDown() {
-  _controller.animateTo(
-    _controller.position.maxScrollExtent + 90,
-    duration: const Duration(seconds: 1),
-    curve: Curves.fastOutSlowIn,
+  Timer(
+    const Duration(milliseconds: 10),
+    () => _controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.ease,
+    ),
   );
 }
 
@@ -71,7 +77,10 @@ class _ChatMessages extends StatelessWidget {
                 top: 10,
               ),
               child: messages[index].messageType == MessageType.receiver
-                  ? _ReceiverMessage(message: messages[index].messageContent)
+                  ? _ReceiverMessage(
+                      message: messages[index].messageContent,
+                      buttons: messages[index].buttons,
+                    )
                   : _SenderMessage(message: messages[index].messageContent),
             );
           },
@@ -93,7 +102,7 @@ class _SenderMessage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(90, 23, 238, .5),
+          color: Theme.of(context).primaryColor.withOpacity(0.5),
         ),
         padding: const EdgeInsets.all(16),
         child: Text(
@@ -106,9 +115,14 @@ class _SenderMessage extends StatelessWidget {
 }
 
 class _ReceiverMessage extends StatelessWidget {
-  const _ReceiverMessage({Key? key, required this.message}) : super(key: key);
+  const _ReceiverMessage({
+    Key? key,
+    required this.message,
+    required this.buttons,
+  }) : super(key: key);
 
   final String message;
+  final List<Button>? buttons;
 
   @override
   Widget build(BuildContext context) {
@@ -120,11 +134,42 @@ class _ReceiverMessage extends StatelessWidget {
           color: Colors.grey.shade200,
         ),
         padding: const EdgeInsets.all(16),
-        child: Text(
-          message,
-          style: const TextStyle(fontSize: 15),
+        child: Column(
+          children: [
+            Text(
+              message,
+              style: const TextStyle(fontSize: 15),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            _buildButtons(context),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    final buttonWidgets = <Widget>[];
+    for (final button in buttons!) {
+      buttonWidgets.add(
+        ElevatedButton(
+          onPressed: () {
+            if (button.payload.contains('/inform{"quote_insurance_typef"')) {
+              context.read<ChatCubit>().newMessageChanged(button.title);
+            } else {
+              context.read<ChatCubit>().newMessageChanged(button.payload);
+            }
+            context.read<ChatCubit>().sendMessage();
+          },
+          child: Text(button.title),
+        ),
+      );
+    }
+    return Wrap(
+      spacing: 8,
+      children: buttonWidgets,
     );
   }
 }

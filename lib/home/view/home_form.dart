@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ichatbot/chat/chat.dart';
 import 'package:ichatbot/common/widgets/base_page.dart';
 import 'package:ichatbot/l10n/l10n.dart';
@@ -22,9 +23,9 @@ class HomeForm extends BasePage {
           width: 200,
           color: Theme.of(context).primaryColor,
           illustration: UnDrawIllustration.chatting,
-          placeholder: const LoadingIndicator(
+          placeholder: LoadingIndicator(
             indicatorType: Indicator.ballPulse,
-            colors: [Color.fromRGBO(90, 23, 238, 1)],
+            colors: [Theme.of(context).primaryColor],
             backgroundColor: Colors.white10,
             pathBackgroundColor: Colors.black,
           ),
@@ -62,14 +63,17 @@ class _StartButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         key: const Key('homeForm_start_elevatedButton'),
-        onPressed: () => Navigator.of(context).push<void>(
-          MaterialPageRoute(
-            builder: (context) => const ChatPage(),
-          ),
-        ),
+        onPressed: () {
+          context.read<ChatCubit>().resetChat();
+          Navigator.of(context).push<void>(
+            MaterialPageRoute(
+              builder: (context) => const ChatPage(),
+            ),
+          );
+        },
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
-          primary: const Color.fromRGBO(90, 23, 238, 1),
+          primary: Theme.of(context).primaryColor,
         ),
         child: const Text(
           'Start',
